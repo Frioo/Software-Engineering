@@ -2,16 +2,25 @@ doctype html
 html 
     head 
         link(rel='stylesheet', href='/bulma.min.css')
-        style
+        link(rel='stylesheet', href='/global.css')
         title Header 
     body
         table.table
             thead
               tr
+                th Code
                 th Name
+                th Continent
+                th Region
                 th Population
+                th Capital
             tbody
                 each country in countries
                     tr
+                      td #{country.Code}
                       td #{country.Name}
+                      td #{country.Continent}
+                      td #{country.Region}
                       td #{country.Population}
+                      td #{country.Capital}
+                      
