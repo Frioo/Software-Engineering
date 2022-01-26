@@ -1,4 +1,7 @@
+const fs = require("fs");
+require("dotenv").config();
 const express = require("express");
+var mysql = require("mysql");
 const app = express();
 const port = 8081;
 
