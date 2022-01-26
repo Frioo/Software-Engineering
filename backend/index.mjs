@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
-import { getCountriesByPopluation, getCountriesByContinent, getTopCountriesByCount, getTopCountriesByCountAndContinent } from "./db.mjs";
+import { getCountries } from "./db.mjs";
 
 const app = express();
 const port = 8081;
@@ -24,21 +24,10 @@ app.get("/city", (reg, res) => {
   res.render("city", { title: "Cities", city: "london" });
 });
 
-app.get("/countries-by-population", async (req, res) => {
-  const countries = await getCountriesByPopluation();
-  res.render("countries", { countries: countries });
-});
-
-app.get("/continents-by-population", async (req, res) => {
-  const continent = req.query.continent;
-  console.log(`Showing countries in ${continent}`);
-  const countries = await getCountriesByContinent(continent);
-  res.render("countries", { countries: countries });
-});
-
-app.get("/countries-by-top-population", async (req, res) => {
-  const countries = await getTopCountriesByCountAndContinent("Europe", 10000);
-  res.render("countries", { countries: countries });
+app.get("/countries", async (req, res) => {
+  const options = { ...req.query };
+  const countries = await getCountries(options);
+  res.render("countries", { countries });
 });
 
 app.listen(port, () => {

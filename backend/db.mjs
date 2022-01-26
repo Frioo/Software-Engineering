@@ -3,71 +3,48 @@ const { PrismaClient, country_Continent } = Prisma;
 
 export const prisma = new PrismaClient();
 
-//Countries
-export async function getCountriesByPopluation() {
-  const res = await prisma.country.findMany({
-    orderBy: {
-      Population: "desc",
-    },
-  });
-  //console.log(res);
-  return res;
-}
+/*
+ * Universal method to retrieve countries from the database.
+ * Allows filters, sorting modes and limits to be set via the options object.
+ */
+export async function getCountries(options) {
+  console.log("GetCountries: Retrieving countries", options);
+  // Extract options
+  let { limit, continent, region } = options;
 
-export async function getTopCountriesByCount(count) {
-  const res = await prisma.country.findMany({
-    orderBy: {
-      Population: "desc"
-    },
-    take: count
-  });
-  console.log(res);
-  return res;
-}
+  // Validate limit value (if it's set)
+  if (limit) {
+    limit = parseInt(limit);
+    if (limit <= 0) {
+      console.log(`GetCountries: Invalid limit value: ${limit}`);
+      limit = undefined;
+    }
+  }
+  // Valid continent values
+  const continents = Object.values(country_Continent);
+  // Sanity check for invalid continent
+  if (!continents.includes(continent)) {
+    const defaultContinent = continents[0];
+    console.log(
+      `GetCountries: Invalid continent '${continent}', setting to default (${defaultContinent})`
+    );
+    continent = defaultContinent;
+  }
 
-//No need to sanity check the count
-export async function getTopCountriesByCountAndContinent(continent, count) {
-  //Sanity check for invalid continent
-  const continents = Object.values(country_Continent);
-  if (!continents.includes(continent)) {
-    console.log(
-      `countries by continent: invalid continent ${continent}, setting to default.`
-    );
-  }
+  // Build and execute the countries query
   const res = await prisma.country.findMany({
-    orderBy: {
-      Population: "desc"
-    },
-    where: {
-      Continent: {
-        equals: continent,
-      },
-    },
-    take: count
-  });
-  console.log(res);
-  return res;
-}
-//Continent
-export async function getCountriesByContinent(continent) {
-  const continents = Object.values(country_Continent);
-  //Sanity check for invalid continent
-  if (!continents.includes(continent)) {
-    console.log(
-      `countries by continent: invalid continent ${continent}, setting to default.`
-    );
-    continent = continents[0];
-  }
-  const res = await prisma.country.findMany({
+    // Default sorting: by population, descending
     orderBy: {
       Population: "desc",
     },
     where: {
-      Continent: {
-        equals: continent,
-      },
+      // If a continent filter is set, filter to only get countries from that continent
+      ...(continent && { Continent: { equals: continent } }),
+      // Same filter for region
+      ...(region && { Region: { equals: region } }),
     },
+    // Similarily, only get the top <limit> records if a limit is set
+    ...(limit && { take: limit }),
   });
-  //console.log(res);
   return res;
 }
