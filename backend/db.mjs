@@ -7,20 +7,20 @@ export async function getCountriesByPopluation() {
   const res = await prisma.country.findMany({
     orderBy: {
       Population: "desc",
-    }
+    },
   });
   console.log(res);
   return res;
 }
 
-export async function getCountriesByContinent(contient) {
+export async function getCountriesByContinent(continent) {
   const res = await prisma.country.findMany({
     orderBy: {
       Population: "desc",
     },
     where: {
       Continent: {
-        equals: contient,
+        equals: continent,
       },
     },
   });

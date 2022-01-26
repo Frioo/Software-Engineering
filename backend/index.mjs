@@ -26,7 +26,7 @@ app.get("/countries-by-population", async (req, res) => {
   res.render("countries", { countries: countries });
 });
 
-app.get("/contients-by-population", async (req, res) => {
+app.get("/continents-by-population", async (req, res) => {
   const countries = await getCountriesByContinent("Europe");
   res.render("countries", { countries: countries });
 });
