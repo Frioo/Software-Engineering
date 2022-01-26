@@ -6,6 +6,9 @@ import { getCountriesByPopluation, getCountriesByContinent } from "./db.mjs";
 const app = express();
 const port = 8081;
 
+// Serve static assets
+app.use(express.static(path.join(process.cwd(), "public")));
+
 //set view engine path
 app.set("views", path.join(process.cwd(), "views"));
 //set view engine to pug
