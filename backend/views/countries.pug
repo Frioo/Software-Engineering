@@ -1,8 +1,17 @@
 doctype html 
 html 
     head 
+        link(rel='stylesheet', href='/bulma.min.css')
+        style
         title Header 
     body
-        each country in countries
-            h4 #{country.Name}
-            span Popluation: #{country.Population}
+        table.table
+            thead
+              tr
+                th Name
+                th Population
+            tbody
+                each country in countries
+                    tr
+                      td #{country.Name}
+                      td #{country.Population}
