@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
+import { getCountriesByPopluation } from "./db.mjs";
 
 const app = express();
 const port = 8081;
@@ -20,6 +21,10 @@ app.get("/city", (reg, res) => {
   res.render("city", { title: "Cities", city: "london" });
 });
 
+app.get("/countries-by-population", async (req, res) => {
+  const countries = await getCountriesByPopluation();
+  res.render("countries", { countries: countries });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
