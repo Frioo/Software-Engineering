@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
-import { getCountriesByPopluation } from "./db.mjs";
+import { getCountriesByPopluation, getCountriesByContinent } from "./db.mjs";
 
 const app = express();
 const port = 8081;
@@ -23,6 +23,11 @@ app.get("/city", (reg, res) => {
 
 app.get("/countries-by-population", async (req, res) => {
   const countries = await getCountriesByPopluation();
+  res.render("countries", { countries: countries });
+});
+
+app.get("/contients-by-population", async (req, res) => {
+  const countries = await getCountriesByContinent("Europe");
   res.render("countries", { countries: countries });
 });
 
