@@ -15,13 +15,8 @@ You'll also need the provided world.sql file imported into the database.
 
 Open a terminal window in the `src` directory.  
 
-### 1. Install project's dependencies: 
-
-```
-npm install
-```
-
-### 2. Create .env file in `./src`  
+### 1. Create .env file in `./src`  
+Make sure to do this BEFORE you install the packages.  
 You need to provide connection details for your MySQL database:  
 ```ini
 DATABASE_URL="mysql://user:password@ip:port/database"
@@ -34,6 +29,12 @@ port: 3306
 database: world  
 ```ini
 DATABASE_URL="mysql://joe:secret@localhost:3306/world"
+```
+
+### 2. Install project's dependencies: 
+
+```
+npm install
 ```
 
 ### 3. Run development server: 
