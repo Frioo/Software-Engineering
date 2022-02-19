@@ -34,6 +34,9 @@ export async function getCountries(options) {
   // Build and execute the countries query
   const res = await prisma.country.findMany({
     // Default sorting: by population, descending
+    include: {
+      city: true,
+    },
     orderBy: {
       Population: "desc",
     },
@@ -45,6 +48,17 @@ export async function getCountries(options) {
     },
     // Similarily, only get the top <limit> records if a limit is set
     ...(limit && { take: limit }),
-  });
+  })
+  
+  // Find the capital city for each country, and asign that object to `Capital` field
+  res.map((country) => {
+    const capitalId = country.Capital;
+    const capital = country.city.find(c => c.ID === capitalId);
+    //console.log(country.Name, capital);
+    country.Capital = capital;
+    return country;
+
+  })
+
   return res;
 }
