@@ -5,8 +5,7 @@
 ### Software / Tools
 [**node**](https://nodejs.org/en/download/) - we're using LTS (v16.13.2)  
 [**npm**](https://www.npmjs.com/) - usually bundled with Node.  
-[**docker**](https://www.docker.com/get-started) - for containerizing the services.
-[**mysql**](https://www.mysql.com/) - you need a mysql database server running on your machine, or access to a remote one. It's connection details and user credentials are required to start the server.
+[**docker**](https://www.docker.com/get-started) - for containerizing the services.  
 
 ### Environment variables
 **For docker-compose:**  
@@ -36,8 +35,8 @@ SERVER_DOCKER_PORT=8081
 SERVER_LOCAL_PORT=8080
 ```
 **For express in dev mode:**  
-`./src/.env.development` env file is required by the express app to connect to the database.  
-An `example.env.development` file inside the folder can be used as a template.  
+`./src/.env.development` env file is required by the express app to connect to the database during development. In production `DATABASE_URL` from root .env file is passed by docker.  
+An `example.env.development` file inside the `./src/` folder can be used as a template.  
 
 *src/.env.development*
 ```ini
