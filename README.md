@@ -2,54 +2,16 @@
 
 ## Prerequisites  
 
+### Software / Tools
 [**node**](https://nodejs.org/en/download/) - we're using LTS (v16.13.2)  
 [**npm**](https://www.npmjs.com/) - usually bundled with Node.  
-[**docker**](https://www.docker.com/get-started) - for containerizing the servers in production  
-[**mysql**](https://www.mysql.com/) - you need a mysql database server running on your machine, or access to a remote one. It's connection details and user credentials are required to start the server.
+[**docker**](https://www.docker.com/get-started) - for containerizing the services.  
 
-## Running in development
-
-### 0. Set up MySQL server  
-This step is only required in development, as the production version uses docker and automatically starts a mysql server alongside the express app.  
-[MySQL Workbench](https://dev.mysql.com/downloads/workbench/)  
-You'll also need the provided world.sql file imported into the database.
-
-### 1. Create .env.development file in `./src`  
-This file is required by the express app to connect to the database.  
-An example.env.development file inside the folder can be used as a template.  
-Make sure to do this BEFORE you install the packages.  
-
-*src/.env.development*
-```ini
-DATABASE_URL="mysql://user:password@ip:port/database"
-```
-**Example:**  
-user: joe  
-password: secret  
-ip: localhost  
-port: 3306  
-database: world  
-```ini
-DATABASE_URL="mysql://joe:secret@localhost:3306/world"
-```
-
-### 2. Install project's dependencies:  
-Open a terminal window in the `src` directory and run:
-
-```
-npm install
-```
-
-### 3. Run development server: 
-
-```sh
-npm run dev
-```
-
-## Running in production
-
-### 1. Create .env file in project root folder  
-In production, the `.env` in root folder is used instead of `src/.env.development`, as it also contains the parameters that set up the MySQL server docker image.  
+### Environment variables
+**For docker-compose:**  
+`.env` file in project root folder.  
+This file is used by docker-compose to start the services with appropriate credentials and data.  
+`DATABASE_*` variables are for the MySQL container, while `SERVER_*` and `DATABASE_URL` are used by the express server.    
 An `example.env` file is provided in the repository that can be used as a template.  
 ```ini
 # Name of database that will be initialized in the docker mysql container
@@ -72,8 +34,51 @@ SERVER_DOCKER_PORT=8081
 # Host machine mapped port (so we'd access the site via `localhost:8080`)
 SERVER_LOCAL_PORT=8080
 ```
+**For express in dev mode:**  
+`./src/.env.development` env file is required by the express app to connect to the database during development. In production `DATABASE_URL` from root .env file is passed by docker.  
+An `example.env.development` file inside the `./src/` folder can be used as a template.  
 
-### 2. Start the containers!
+*src/.env.development*
+```ini
+DATABASE_URL="mysql://user:password@ip:port/database"
+```
+**Example:**  
+user: joe  
+password: secret  
+ip: localhost  
+port: 3306 (DATABASE_LOCAL_PORT in dev)  
+database: world  
+```ini
+DATABASE_URL="mysql://joe:secret@localhost:3307/world"
+```
+
+
+## Running in development
+
+### 1. Install project's dependencies:  
+Open a terminal window in the `src` directory and run:
+
+```
+npm install
+```
+
+### 2. Run development servers:
+**Database**  
+First, start just the database using docker-compose:  
+```sh
+docker-compose run --service-ports database
+```
+The `--service-ports` option is required for docker-compose to map the container port to localhost, so it's accessible to website dev server.  
+
+**Express**  
+Next, start the express server:  
+```sh
+npm run dev
+```
+
+## Running in production
+
+### 1. Start the containers!
 Open a terminal window at the project's root and run:  
 ```
 docker-compose up
