@@ -27,7 +27,7 @@ app.get("/city", (reg, res) => {
 app.get("/countries", async (req, res) => {
   const options = { ...req.query };
   const countries = await getCountries(options);
-  res.render("countries", { countries });
+  res.render("countries", { options, countries });
 });
 
 app.listen(port, () => {
