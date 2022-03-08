@@ -11,12 +11,13 @@ app.use(express.static(path.join(process.cwd(), "public")));
 
 //set view engine path
 app.set("views", path.join(process.cwd(), "views"));
+
 //set view engine to pug
 app.set("view engine", "pug");
 
 //default route
 app.get("/", (req, res) => {
-  res.render("view", { title: "xx me" });
+  res.render("view", { title: "Hello, world!" });
 });
 
 // City Route
