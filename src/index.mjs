@@ -9,6 +9,12 @@ const port = 8081;
 // Serve static assets
 app.use(express.static(path.join(process.cwd(), "public")));
 
+/* Middleware */
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
+
 //set view engine path
 app.set("views", path.join(process.cwd(), "views"));
 
