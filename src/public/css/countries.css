@@ -1,0 +1,16 @@
+form {
+  margin-bottom: 1.5rem;
+}
+
+table td {
+  width: max-content;
+  white-space: pre;
+}
+
+table td:nth-child(2) {
+  width: 100%;
+}
+
+table td:nth-child(5) {
+  text-align: right;
+}
