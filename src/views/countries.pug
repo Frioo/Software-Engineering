@@ -48,12 +48,11 @@ block content
                     td #{country.Name}
                     td #{country.Continent}
                     td #{country.Region}
-                    td #{country.Population}
+                    td= Intl.NumberFormat("en-GB").format(country.Population)
                     td #{country.Capital.Name}
     
     script.
         function handleChange() {
             const form = document.getElementById("main-form");
-            form.submit()
+            form.submit();
         }
-                      
