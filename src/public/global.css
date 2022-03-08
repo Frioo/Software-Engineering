@@ -1,3 +1,29 @@
-table td:nth-child(5) {
-  text-align: right;
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.5rem;
+}
+
+#layout-nav nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  grid-column: 1;
+  padding: 2rem 1rem;
+}
+
+#layout-content {
+  width: 100%;
 }
