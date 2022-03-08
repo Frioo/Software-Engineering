@@ -8,7 +8,7 @@ html
     body
         #layout
             #layout-nav
-                nav
-                    img(src="/logo.png")
+                include mixins/nav
+                +navigation()
             #layout-content
                 block content
