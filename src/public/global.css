@@ -16,7 +16,7 @@ body {
   gap: 1.5rem;
 }
 
-#layout-nav nav {
+#layout-nav aside {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -24,6 +24,13 @@ body {
   padding: 2rem 1rem;
 }
 
+#layout-nav aside img {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
 #layout-content {
   width: 100%;
+  padding: 1.5rem;
+  padding-left: 0;
 }
