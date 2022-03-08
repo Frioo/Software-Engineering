@@ -1,26 +1,59 @@
-doctype html 
-html 
-    head 
-        link(rel='stylesheet', href='/bulma.min.css')
-        link(rel='stylesheet', href='/global.css')
-        title Header 
-    body
-        table.table
-            thead
-              tr
-                th Code
-                th Name
-                th Continent
-                th Region
-                th Population
-                th Capital
-            tbody
-                each country in countries
-                    tr
-                      td #{country.Code}
-                      td #{country.Name}
-                      td #{country.Continent}
-                      td #{country.Region}
-                      td #{country.Population}
-                      td #{country.Capital.Name}
+extends layout.pug
+
+block head
+    link(rel="stylesheet", href="/css/countries.css")
+
+block content
+    - 
+        const form = {
+            continent: [
+                { label: "North America", value: "North_America" },
+                { label: "South America", value: "South_America" },
+                { label: "Europe", value: "Europe" },
+                { label: "Asia", value: "Asia" }
+            ]
+        };
+
+        const getContinent = () => options.continent;
+
+    form(id="main-form", action="/countries", method="GET")
+        -
+            function submit() {
+                this.form.submit()
+            }
+        each entry in Object.entries(form)
+            - const [optionName, optionValues] = entry;
+            div.field
+                label.label
+                    #{optionName}
+                div.control
+                    div.select
+                        select(name=optionName, onchange='handleChange()')
+                            each opt in optionValues
+                                - const { label, value } = opt;
+                                option(value=value, selected=value === getContinent()) #{label}
+    
+    table.table
+        thead
+            th Code
+            th Name
+            th Continent
+            th Region
+            th Population
+            th Capital
+        tbody
+            each country in countries
+                tr
+                    td #{country.Code}
+                    td #{country.Name}
+                    td #{country.Continent}
+                    td #{country.Region}
+                    td #{country.Population}
+                    td #{country.Capital.Name}
+    
+    script.
+        function handleChange() {
+            const form = document.getElementById("main-form");
+            form.submit()
+        }
                       
