@@ -13,46 +13,72 @@ block content
                 { label: "Asia", value: "Asia" }
             ]
         };
+        const limit = options.limit
 
         const getContinent = () => options.continent;
+    .container
+        article.panel(id="panel-options")
+            p.panel-heading Filters & Sorting
+            form(id="main-form", action="/countries", method="GET")
+                each entry in Object.entries(form)
+                    - const [optionName, optionValues] = entry;
+                    div.panel-block
+                        div.field
+                            label.label #{optionName}
+                            div.control
+                                div.select
+                                    select(name=optionName, onchange='handleChange()')
+                                        each opt in optionValues
+                                            - const { label, value } = opt;
+                                            option(value=value, selected=value === getContinent()) #{label}
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
+                            | Limit
+                        div.control
+                            input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                div.panel-block
+                    button.button(role="submit", class="is-link is-outlined") Apply
 
-    form(id="main-form", action="/countries", method="GET")
-        -
-            function submit() {
-                this.form.submit()
-            }
-        each entry in Object.entries(form)
-            - const [optionName, optionValues] = entry;
-            div.field
-                label.label
-                    #{optionName}
-                div.control
-                    div.select
-                        select(name=optionName, onchange='handleChange()')
-                            each opt in optionValues
-                                - const { label, value } = opt;
-                                option(value=value, selected=value === getContinent()) #{label}
-    
-    table.table
-        thead
-            th Code
-            th Name
-            th Continent
-            th Region
-            th Population
-            th Capital
-        tbody
-            each country in countries
-                tr
-                    td #{country.Code}
-                    td #{country.Name}
-                    td #{country.Continent}
-                    td #{country.Region}
-                    td= Intl.NumberFormat("en-GB").format(country.Population)
-                    td #{country.Capital.Name}
+
+        article.panel(id="panel-data")
+            p.panel-heading Data
+            div.panel-block(id="panel-block-table")
+                table.table
+                    thead
+                        th #
+                        th Code
+                        th Name
+                        th Continent
+                        th Region
+                        th Population
+                        th Capital
+                    tbody
+                        each country, index in countries
+                            tr
+                                td #{index + 1}
+                                td #{country.Code}
+                                td #{country.Name}
+                                td #{country.Continent}
+                                td #{country.Region}
+                                td= Intl.NumberFormat("en-GB").format(country.Population)
+                                td #{country.Capital.Name}
     
     script.
+        const formEl = document.getElementById("main-form");
+        const chkToggleLimit = document.getElementById("chk-limit");
+        const limitEl = document.getElementById("input-limit");
+        let changed = false
+
+        chkToggleLimit.addEventListener("change", handleToggleLimit);
+
         function handleChange() {
-            const form = document.getElementById("main-form");
-            form.submit();
+            changed = true;
+        }
+
+        function handleToggleLimit(e) {
+            const limitEnabled = e.target.checked;
+            limit = limitEnabled ? 1 : undefined;
+            limitEl.disabled = !limitEnabled
         }
