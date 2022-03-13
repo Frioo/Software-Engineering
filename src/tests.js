@@ -1,7 +1,8 @@
 import express from "express";
-import Prisma, { PrismaClient } from "@prisma/client";
+import Prisma from "@prisma/client";
+const { PrismaClient } = Prisma;
 
-const functions = {
+export const functions = {
     isExpressDefined: function () {
         return express();
     },
@@ -9,5 +10,3 @@ const functions = {
         return new PrismaClient();
     }
 }
-
-module.exports = functions;
