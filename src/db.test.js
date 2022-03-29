@@ -2,6 +2,9 @@ import { getCountries, getCountryOptions } from "./db.mjs";
 import prisma from "./js/client.mjs";
 import { jest, expect } from "@jest/globals";
 
+default_continent = 'Asia'
+default_Region = 'Europe'
+
 test("Should set continent filter to Africa", () => {
   const options = {
     continent: "Africa",
@@ -17,7 +20,7 @@ test("Should reset continent filter to Asia", () => {
     continent: "Invalid_Continent",
   });
   expect(res).toBeDefined();
-  expect(res.where.Continent.equals).toBe("Asia");
+  expect(res.where.Continent.equals).toBe(default_continent);
 });
 
 test("Should set limit to 10", () => {
@@ -34,6 +37,13 @@ test("Should not set limit", () => {
   expect(res.take).toBeUndefined();
 });
 
+test("Region should not set to invalid value", () => {
+  const res = getCountryOptions({
+    region: "reigongsd",
+  });
+  expect(res).toBeDefined();
+  expect(res.where.Region.equals).toBe(default_Region)
+})
 /* 
 test('GetCountries region filter', async () => {
   let region = 'Middle East'

@@ -1,6 +1,7 @@
 import Prisma from "@prisma/client";
 const { country_Continent } = Prisma;
 
+
 //export const prisma = new PrismaClient();
 import prisma from "./js/client.mjs";
 
@@ -37,6 +38,7 @@ export function getCountryOptions(options) {
     continent = defaultContinent;
   }
 
+  const regions = Object.values()
   return {
     // Default sorting: by population, descending
     orderBy: {
