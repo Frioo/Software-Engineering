@@ -3,10 +3,9 @@ orbs:
   node: circleci/node@4.7.0
 jobs:
   build:
+    docker:
+      - image: cimg/node:lts
     working_directory: ~/src
-    executor:
-      name: node/default
-      tag: "10.4"
     steps:
       - checkout
       - run: npm install
