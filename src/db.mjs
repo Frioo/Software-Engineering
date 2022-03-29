@@ -1,14 +1,16 @@
 import Prisma from "@prisma/client";
-const { PrismaClient, country_Continent } = Prisma;
+const { country_Continent } = Prisma;
 
-export const prisma = new PrismaClient();
+//export const prisma = new PrismaClient();
+import prisma from "./js/client.mjs";
 
-/*
- * Universal method to retrieve countries from the database.
- * Allows filters, sorting modes and limits to be set via the options object.
- */
-export async function getCountries(options) {
-  console.log("GetCountries: Retrieving countries", options);
+/* 
+  Handles parameters for retrieving countries.
+  Receives an options object with HTTP parameters.
+  Validates param values / sets defaults when needed.
+  Transforms that object into Prisma-compatible query options.
+*/
+export function getCountryOptions(options) {
   // Extract options
   let { limit, continent, region } = options;
 
@@ -16,27 +18,27 @@ export async function getCountries(options) {
   if (limit) {
     limit = parseInt(limit);
     if (limit <= 0) {
-      console.log(`GetCountries: Invalid limit value: ${limit}`);
+      console.log(
+        `GetCountries: Invalid limit value: ${limit}; unsetting limit.`
+      );
       limit = undefined;
     }
   }
+
   // Valid continent values
   const continents = Object.values(country_Continent);
-  // Sanity check for invalid continent
+
+  // Sanity check for invalid continent (if set)
   if (continent && !continents.includes(continent)) {
     const defaultContinent = continents[0];
     console.log(
-      `GetCountries: Invalid continent '${continent}', setting to default (${defaultContinent})`
+      `GetQueryOptions: Invalid continent '${continent}', setting to default (${defaultContinent})`
     );
     continent = defaultContinent;
   }
 
-  // Build and execute the countries query
-  const res = await prisma.country.findMany({
+  return {
     // Default sorting: by population, descending
-    include: {
-      city: true,
-    },
     orderBy: {
       Population: "desc",
     },
@@ -48,21 +50,39 @@ export async function getCountries(options) {
     },
     // Similarily, only get the top <limit> records if a limit is set
     ...(limit && { take: limit }),
-  })
+  };
+}
 
-  
+/*
+ * Universal method to retrieve countries from the database.
+ * Allows filters, sorting modes and limits to be set via the options object.
+ */
+export async function getCountries(options) {
+  console.log("GetCountries: Retrieving countries", options);
+
+  const opts = getCountryOptions(options);
+
+  // Build and execute the countries query
+  const res = await prisma.country.findMany({
+    // Get all cities related to this country
+    include: {
+      city: true,
+    },
+    // Expand transformed options for Prisma to use
+    ...opts,
+  });
+
   // Find the capital city for each country, and asign that object to `Capital` field
   res.map((country) => {
     const capitalId = country.Capital;
-    const capital = country.city.find(c => c.ID === capitalId);
+    const capital = country.city.find((c) => c.ID === capitalId);
     //console.log(country.Name, capital);
     if (!capital) {
       console.log(country);
     }
     country.CapitalCity = capital;
     return country;
-
-  })
+  });
 
   return res;
 }
