@@ -63,7 +63,11 @@ block content
                                 td #{country.Continent}
                                 td #{country.Region}
                                 td= Intl.NumberFormat("en-GB").format(country.Population)
-                                td #{country.Capital.Name}
+                                - let CapitalCity = country.CapitalCity
+                                if CapitalCity
+                                    td #{country.CapitalCity.Name}
+                                else
+                                    td "N/A"
     
     script.
         const formEl = document.getElementById("main-form");

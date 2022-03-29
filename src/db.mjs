@@ -23,7 +23,7 @@ export async function getCountries(options) {
   // Valid continent values
   const continents = Object.values(country_Continent);
   // Sanity check for invalid continent
-  if (!continents.includes(continent)) {
+  if (continent && !continents.includes(continent)) {
     const defaultContinent = continents[0];
     console.log(
       `GetCountries: Invalid continent '${continent}', setting to default (${defaultContinent})`
@@ -49,13 +49,17 @@ export async function getCountries(options) {
     // Similarily, only get the top <limit> records if a limit is set
     ...(limit && { take: limit }),
   })
+
   
   // Find the capital city for each country, and asign that object to `Capital` field
   res.map((country) => {
     const capitalId = country.Capital;
     const capital = country.city.find(c => c.ID === capitalId);
     //console.log(country.Name, capital);
-    country.Capital = capital;
+    if (!capital) {
+      console.log(country);
+    }
+    country.CapitalCity = capital;
     return country;
 
   })
