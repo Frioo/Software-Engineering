@@ -7,6 +7,7 @@ jobs:
     docker:
       - image: cimg/node:lts
     steps:
-      - checkout
-      - run: cd software-engineering/src && npm install
-      - run: cd software-engineering/src && npm npm run test
+      - checkout:
+          path: ~/software-engineering
+      - run: npm install
+      - run: npm run test
