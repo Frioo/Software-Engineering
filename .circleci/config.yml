@@ -10,4 +10,8 @@ jobs:
       - checkout:
           path: ~/software-engineering
       - run: npm install
-      - run: npm run test
+      - run: 
+          name: "Run tests"
+          environment:
+            NODE_OPTIONS: --experimental-vm-modules
+          command: npm run test
