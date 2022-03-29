@@ -8,7 +8,7 @@ jobs:
       - image: cimg/node:lts
     steps:
       - checkout
-        path: ~/software-engineering
+          path: ~/software-engineering
       - run: cd ./src
       - run: npm install
       - run: npm run test
