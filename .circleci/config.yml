@@ -5,8 +5,8 @@ jobs:
   build:
     docker:
       - image: cimg/node:lts
-    working_directory: ~/src
     steps:
       - checkout
+      - run: cd ./src
       - run: npm install
       - run: npm run test
