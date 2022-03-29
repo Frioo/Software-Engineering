@@ -1,49 +1,45 @@
-import Prisma from "@prisma/client";
-import { getCountries } from "./db.mjs";
-const { PrismaClient } = Prisma;
+import { getCountries, getCountryOptions } from "./db.mjs";
+import prisma from "./js/client.mjs";
+import { jest, expect } from "@jest/globals";
 
-async function getContinentCountries(continent) {
+test("Should set continent filter to Africa", () => {
   const options = {
-    continent
-  }
-  const res = await getCountries(options);
-  return res;
-}
+    continent: "Africa",
+  };
+  const res = getCountryOptions(options);
+  expect(res).toBeDefined();
+  expect(res.where).toBeDefined();
+  expect(res.where.Continent.equals).toBe("Africa");
+});
 
-async function getNCountries(limit) {
-  const options = {
-    limit
-  }
-  const res = await getCountries(options)
-  return res.length
-}
+test("Should reset continent filter to Asia", () => {
+  const res = getCountryOptions({
+    continent: "Invalid_Continent",
+  });
+  expect(res).toBeDefined();
+  expect(res.where.Continent.equals).toBe("Asia");
+});
 
-async function getRegionCountries(region) {
-  const options = {
-    region
-  }
-  const res = await getCountries(options)
-  return res;
-}
-test('GetCountries continent filter', async () => {
-  let continent = 'Asia'
-  const countries = await getContinentCountries(continent);
-  countries.forEach(c => {
-    expect(c.Continent).toBe(continent);
-  })
-})
+test("Should set limit to 10", () => {
+  const res = getCountryOptions({
+    limit: 10,
+  });
+  expect(res.take).toBe(10);
+});
 
-test('GetNCountries', async () => {
-  let limit = 10
-  const res = await getNCountries(limit)
-  expect(res).toBe(limit)
-}) 
+test("Should not set limit", () => {
+  const res = getCountryOptions({
+    limit: -420,
+  });
+  expect(res.take).toBeUndefined();
+});
 
+/* 
 test('GetCountries region filter', async () => {
   let region = 'Middle East'
   const countries = await getRegionCountries(region)
   countries.forEach(element => {
     expect(element.Region).toBe(region)
   })
-
 })
+ */
