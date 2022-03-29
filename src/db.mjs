@@ -76,10 +76,6 @@ export async function getCountries(options) {
   res.map((country) => {
     const capitalId = country.Capital;
     const capital = country.city.find((c) => c.ID === capitalId);
-    //console.log(country.Name, capital);
-    if (!capital) {
-      console.log(country);
-    }
     country.CapitalCity = capital;
     return country;
   });
