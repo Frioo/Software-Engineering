@@ -10,9 +10,12 @@ block content
                 { label: "North America", value: "North_America" },
                 { label: "South America", value: "South_America" },
                 { label: "Europe", value: "Europe" },
-                { label: "Asia", value: "Asia" }
-            ]
+                { label: "Asia", value: "Asia" }]
         };
+        const SortObjects = [
+            {label: "Population Ascending", value: "Population Ascending"},
+            {label: "Population Descending", value: "Population Descending"}
+        ]
         const limit = options.limit
 
         const getContinent = () => options.continent;
@@ -31,13 +34,23 @@ block content
                                         each opt in optionValues
                                             - const { label, value } = opt;
                                             option(value=value, selected=value === getContinent()) #{label}
-                div.panel-block
+                            label.label Sort By
+                            div.control
+                                div.select
+                                    select(name="Inputs-sort", onchange='handleChange()')
+                                        each opt in SortObjects
+                                            - const { label, value } = opt;
+                                            option(value=value) #{label}
+                    div.panel-block
                     div.field
                         label.checkbox.label
                             input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
                             | Limit
                         div.control
                             input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                        div.Pop_Asc
+
+
                 div.panel-block
                     button.button(role="submit", class="is-link is-outlined") Apply
 
