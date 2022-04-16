@@ -86,15 +86,14 @@ export async function getCountries(options) {
 export async function LivingInCities(options) {
   let res = await getCountries(options)
   let pop = 0
-  //res.forEach(element => pop += element.city.forEach(city => { if (city.Population) { pop = city.Population } }))
   res.forEach(country => {
     let countryPopulation = country.city.reduce((total, city) => {
       total += city.Population;
       return total;
     }, 0);
     let notLivingInCitiesPop = country.Population - countryPopulation
-    console.log("Population of countries in city: ", country.Name, countryPopulation)
-    console.log("Total country pop: ", country.Name, notLivingInCitiesPop)
+    console.log("Total population of people living in cities: ", country.Name, countryPopulation)
+    console.log("Total country not living in cities pop: ", country.Name, notLivingInCitiesPop)
   });
   return pop
 }
