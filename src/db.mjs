@@ -92,11 +92,9 @@ export async function LivingInCities(options) {
       total += city.Population;
       return total;
     }, 0);
+    let notLivingInCitiesPop = country.Population - countryPopulation
     console.log("Population of countries in city: ", country.Name, countryPopulation)
+    console.log("Total country pop: ", country.Name, notLivingInCitiesPop)
   });
-  res.forEach(country => {
-    let populations = country.Population
-    console.log("Total country pop: ", country.Name, populations)
-  })
   return pop
 }
