@@ -42,13 +42,13 @@ block content
                                             - const { label, value } = opt;
                                             option(value=value) #{label}
                     div.panel-block
-                    div.field
-                        label.checkbox.label
-                            input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
-                            | Limit
-                        div.control
-                            input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
-                        div.Pop_Asc
+                        div.field
+                            label.checkbox.label
+                                input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
+                                | Limit
+                            div.control
+                                input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                            div.Pop_Asc
 
 
                 div.panel-block
