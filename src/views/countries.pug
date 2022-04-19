@@ -12,9 +12,9 @@ block content
                 { label: "Europe", value: "Europe" },
                 { label: "Asia", value: "Asia" }]
         };
-        const SortObjects = [
-            {label: "Population Ascending", value: "Population Ascending"},
-            {label: "Population Descending", value: "Population Descending"}
+        const sortObjects = [
+            {label: "Population Ascending", value: "Pop_Asc"},
+            {label: "Population Descending", value: "Pop_Desc"}
         ]
         const limit = options.limit
 
@@ -37,8 +37,8 @@ block content
                             label.label Sort By
                             div.control
                                 div.select
-                                    select(name="Inputs-sort", onchange='handleChange()')
-                                        each opt in SortObjects
+                                    select(name="sortby", onchange='handleChange()')
+                                        each opt in sortObjects
                                             - const { label, value } = opt;
                                             option(value=value) #{label}
                     div.panel-block
