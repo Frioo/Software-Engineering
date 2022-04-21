@@ -39,26 +39,24 @@ export function getCountryOptions(options) {
 
   // Define column sorting based on sortby parameter
   let orderBy = {};
-  if (sortby) {
-    switch (sortby) {
-      case "Pop_Asc":
-        orderBy = {
-          Population: "asc",
-        };
-        break;
+  switch (sortby) {
+    case "Pop_Asc":
+      orderBy = {
+        Population: "asc",
+      };
+      break;
 
-      case "Pop_Desc":
-        orderBy = {
-          Population: "desc",
-        };
-        break;
+    case "Pop_Desc":
+      orderBy = {
+        Population: "desc",
+      };
+      break;
 
-      default:
-        orderBy = {
-          Population: "desc",
-        };
-        break;
-    }
+    default:
+      orderBy = {
+        Population: "desc",
+      };
+      break;
   }
 
   return {
