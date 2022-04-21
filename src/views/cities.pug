@@ -19,6 +19,7 @@ block content
         }
 
         const filterContinent = options.continent !== undefined;
+        const filterCapital = options.capital;
         const getContinent = () => options.continent;
         const getSortBy  = () => options.sortby;
         const limit = options.limit
@@ -38,6 +39,13 @@ block content
                                     each opt in form.continent
                                         - const { label, value } = opt;
                                         option(value=value, selected=value === getContinent()) #{label}
+                
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-capital", name="capital", type="checkbox", checked=filterCapital)
+                            | Capital
+                
                 div.panel-block
                     div.field
                         label.label Sort By
@@ -47,6 +55,7 @@ block content
                                     each opt in form.sortBy
                                         - const { label, value } = opt;
                                         option(value=value, selected = value === getSortBy()) #{label}
+                
                 div.panel-block
                     div.field
                         label.checkbox.label
