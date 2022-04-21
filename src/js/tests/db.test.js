@@ -1,5 +1,5 @@
-import { getCountries, getCountryOptions } from "./db.mjs";
-import prisma from "./js/client.mjs";
+import { getCountries, getCountryOptions } from "../db.mjs";
+import prisma from "../client.mjs";
 import { jest, expect } from "@jest/globals";
 
 test("Should set continent filter to Africa", () => {

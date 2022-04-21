@@ -2,7 +2,7 @@ import Prisma from "@prisma/client";
 const { country_Continent } = Prisma;
 
 //export const prisma = new PrismaClient();
-import prisma from "./js/client.mjs";
+import prisma from "./client.mjs";
 
 /* 
   Handles parameters for retrieving countries.
@@ -156,16 +156,24 @@ export async function getCities(options) {
 }
 
 export async function LivingInCities(options) {
-  let res = await getCountries(options)
-  let pop = 0
-  res.forEach(country => {
+  let res = await getCountries(options);
+  let pop = 0;
+  res.forEach((country) => {
     let countryPopulation = country.city.reduce((total, city) => {
       total += city.Population;
       return total;
     }, 0);
-    let notLivingInCitiesPop = country.Population - countryPopulation
-    console.log("Total population of people living in cities: ", country.Name, countryPopulation)
-    console.log("Total country not living in cities pop: ", country.Name, notLivingInCitiesPop)
+    let notLivingInCitiesPop = country.Population - countryPopulation;
+    console.log(
+      "Total population of people living in cities: ",
+      country.Name,
+      countryPopulation
+    );
+    console.log(
+      "Total country not living in cities pop: ",
+      country.Name,
+      notLivingInCitiesPop
+    );
   });
-  return pop
+  return pop;
 }

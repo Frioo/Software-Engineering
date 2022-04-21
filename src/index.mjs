@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
-import { getCountries, getCities } from "./db.mjs";
+import { getCountries, getCities } from "./js/db.mjs";
 
 const app = express();
 const port = 8081;
