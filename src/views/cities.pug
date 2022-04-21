@@ -6,18 +6,34 @@ block head
 block content
     -
         const form = {
+            continent: [
+                { label: "North America", value: "North_America" },
+                { label: "South America", value: "South_America" },
+                { label: "Europe", value: "Europe" },
+                { label: "Asia", value: "Asia" },
+            ],
             sortBy: [
                 { label: "Population Descending", value: "Pop_Desc" },
                 { label: "Population Ascending", value: "Pop_Asc" },
             ]
         }
 
+        const getContinent = () => options.continent;
         const getSortBy  = () => options.sortby;
 
     .container
         article.panel(id="panel-options")
             p.panel-heading Filters & Sorting
             form(id="main-form", action="/cities", method="GET")
+                div.panel-block
+                    div.field
+                        label.label Continent
+                        div.control
+                            div.select
+                                select(name="continent", onchange='handleChange()')
+                                    each opt in form.continent
+                                        - const { label, value } = opt;
+                                        option(value=value, selected=value === getContinent()) #{label}
                 div.panel-block
                     div.field
                         label.label Sort By
