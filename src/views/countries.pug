@@ -74,12 +74,12 @@ block content
                     tbody
                         each country, index in countries
                             tr
-                                td #{index + 1}
+                                td(data-type="number") #{index + 1}
                                 td #{country.Code}
                                 td #{country.Name}
                                 td #{country.Continent}
                                 td #{country.Region}
-                                td= Intl.NumberFormat("en-GB").format(country.Population)
+                                td(data-type="number")= Intl.NumberFormat("en-GB").format(country.Population)
                                 - let CapitalCity = country.CapitalCity
                                 if CapitalCity
                                     td #{country.CapitalCity.Name}

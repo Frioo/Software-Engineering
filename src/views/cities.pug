@@ -24,8 +24,8 @@ block content
                     tbody
                         each city, index in cities
                             tr
-                                td #{index + 1}
+                                td(data-type="number") #{index + 1}
                                 td #{city.Name}
                                 td #{city.CountryCode}
                                 td #{city.District}
-                                td= Intl.NumberFormat("en-GB").format(city.Population)
+                                td(data-type="number")= Intl.NumberFormat("en-GB").format(city.Population)
