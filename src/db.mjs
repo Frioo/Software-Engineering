@@ -110,20 +110,15 @@ export async function getCountries(options) {
 export async function getCities(options) {
   const { limit, ...opts } = options;
   console.log("GetCities", opts);
-  const countries = await getCountries(options);
+  const countries = await getCountries(opts);
   const cities = countries.reduce((res, country) => {
     res = [...res, ...country.city];
     return res;
   }, []);
 
-  let res = [];
-  if (limit && limit > 0) {
-    res = cities.splice(0, limit);
-  } else {
-    res = cities;
-  }
+  let res = cities;
 
-  return res.sort((a, b) => {
+  res.sort((a, b) => {
     let diff = a.Population - b.Population;
     switch (options.sortby) {
       case "Pop_Asc":
@@ -136,6 +131,12 @@ export async function getCities(options) {
         return -diff;
     }
   });
+
+  if (limit && limit > 0) {
+    res = cities.splice(0, limit);
+  }
+
+  return res;
 }
 
 export async function LivingInCities(options) {
