@@ -108,16 +108,30 @@ export async function getCountries(options) {
  * or filter/sort by specific columns
  */
 export async function getCities(options) {
-  const { limit, ...opts } = options;
-  console.log("GetCities", opts);
+  console.log("GetCities", options);
+  // Remove limit from options and store it separately
+  // This is done because we want to apply the limit to cities, not countries
+  // Also extract capital-only bool param
+  const { limit, capital, ...opts } = options;
+  // Fetch countries and their cities (also pass all the other filters and stuff)
   const countries = await getCountries(opts);
+  // Collect cities from countries based on filters
   const cities = countries.reduce((res, country) => {
-    res = [...res, ...country.city];
+    if (capital && country.CapitalCity) {
+      // Only add capital cities
+      res = [...res, country.CapitalCity];
+    } else if (!capital) {
+      // Add all cities from all countries
+      res = [...res, ...country.city];
+    }
     return res;
   }, []);
 
+  // At this point column-based filters are applied.
+  // Store the cities in a mutable variable for further transformations.
   let res = cities;
 
+  // Sort cities based on 'sortby' param
   res.sort((a, b) => {
     let diff = a.Population - b.Population;
     switch (options.sortby) {
@@ -132,10 +146,12 @@ export async function getCities(options) {
     }
   });
 
+  // Apply limit if set
   if (limit && limit > 0) {
     res = cities.splice(0, limit);
   }
 
+  // Return!
   return res;
 }
 
