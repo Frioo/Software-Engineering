@@ -1,0 +1,31 @@
+extends layout.pug
+
+block head
+    link(rel="stylesheet", href="/css/countries.css")
+
+block content
+    -
+        const form = {};
+
+    .container
+        article.panel(id="panel-options")
+            p.panel-heading Filters & Sorting
+
+        article.panel(id="panel-data")
+            p.panel-heading Data
+            div.panel-block(id="panel-block-table")
+                table.table
+                    thead
+                        th #
+                        th Name
+                        th Country Code
+                        th District
+                        th Population
+                    tbody
+                        each city, index in cities
+                            tr
+                                td #{index + 1}
+                                td #{city.Name}
+                                td #{city.CountryCode}
+                                td #{city.District}
+                                td= Intl.NumberFormat("en-GB").format(city.Population)
