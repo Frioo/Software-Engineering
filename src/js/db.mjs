@@ -119,6 +119,11 @@ export async function getCities(options) {
   const cities = countries.reduce((res, c) => {
     let toAdd = [];
 
+    // Country filter
+    if (country && country !== c.Code) {
+      // Skip this country if codes don't match
+      return res;
+    }
 
     // Capital city filter
     if (capital && c.CapitalCity) {
@@ -128,6 +133,15 @@ export async function getCities(options) {
       // Add all cities from each country
       toAdd = c.city;
     }
+
+    // District filter
+    toAdd = toAdd.filter((c) => {
+      if (district && c.District !== district) {
+        return false;
+      }
+      return true;
+    });
+
     // Append processed cities to results
     res = [...res, ...toAdd];
 
