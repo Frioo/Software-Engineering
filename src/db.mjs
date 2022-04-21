@@ -116,11 +116,26 @@ export async function getCities(options) {
     return res;
   }, []);
 
+  let res = [];
   if (limit && limit > 0) {
-    return cities.splice(0, limit);
+    res = cities.splice(0, limit);
+  } else {
+    res = cities;
   }
 
-  return cities;
+  return res.sort((a, b) => {
+    let diff = a.Population - b.Population;
+    switch (options.sortby) {
+      case "Pop_Asc":
+        return diff;
+
+      case "Pop_Desc":
+        return -diff;
+
+      default:
+        return -diff;
+    }
+  });
 }
 
 export async function LivingInCities(options) {
