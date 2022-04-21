@@ -19,6 +19,8 @@ block content
         }
 
         const filterContinent = options.continent !== undefined;
+        const filterDistrict = options.district !== undefined;
+        const getDistrict = () => options.district;
         const filterCapital = options.capital;
         const getContinent = () => options.continent;
         const getSortBy  = () => options.sortby;
@@ -39,6 +41,15 @@ block content
                                     each opt in form.continent
                                         - const { label, value } = opt;
                                         option(value=value, selected=value === getContinent()) #{label}
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-district", type="checkbox", checked=filterDistrict, style="margin-right: 0.5rem;")
+                            | District
+                        div.control
+                            div
+                                input.input(id="input-district", name="district", type="text", value=getDistrict(), disabled=!filterDistrict)
                 
                 div.panel-block
                     div.field
@@ -109,3 +120,11 @@ block content
             const enabled = e.target.checked;
             continentEl.disabled = !enabled;
         }
+
+        // District filter + toggle
+        const districtEl = document.getElementById("input-district");
+        const chkDistrict = document.getElementById("chk-district");
+        chkDistrict.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            districtEl.disabled = !enabled;
+        })
