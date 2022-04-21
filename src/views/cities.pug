@@ -5,11 +5,31 @@ block head
 
 block content
     -
-        const form = {};
+        const form = {
+            sortBy: [
+                { label: "Population Descending", value: "Pop_Desc" },
+                { label: "Population Ascending", value: "Pop_Asc" },
+            ]
+        }
+
+        const getSortBy  = () => options.sortby;
 
     .container
         article.panel(id="panel-options")
             p.panel-heading Filters & Sorting
+            form(id="main-form", action="/cities", method="GET")
+                div.panel-block
+                    div.field
+                        label.label Sort By
+                        div.control
+                            div.select
+                                select(name="sortby", onchange='handleChange()')
+                                    each opt in form.sortBy
+                                        - const { label, value } = opt;
+                                        option(value=value, selected = value === getSortBy()) #{label}
+
+                div.panel-block
+                    button.button(role="submit", class="is-link is-outlined") Apply
 
         article.panel(id="panel-data")
             p.panel-heading Data
