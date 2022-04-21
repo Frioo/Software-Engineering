@@ -19,6 +19,8 @@ block content
         const limit = options.limit
 
         const getContinent = () => options.continent;
+
+        const getSortBy = () => options.sortby;
     .container
         article.panel(id="panel-options")
             p.panel-heading Filters & Sorting
@@ -40,7 +42,7 @@ block content
                                     select(name="sortby", onchange='handleChange()')
                                         each opt in sortObjects
                                             - const { label, value } = opt;
-                                            option(value=value) #{label}
+                                            option(value=value, selected = value === getSortBy()) #{label}
                     div.panel-block
                         div.field
                             label.checkbox.label

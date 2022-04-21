@@ -12,7 +12,7 @@ import prisma from "./js/client.mjs";
 */
 export function getCountryOptions(options) {
   // Extract options
-  let { limit, continent, region } = options;
+  let { limit, continent, region, sortby } = options;
 
   // Validate limit value (if it's set)
   if (limit) {
@@ -37,11 +37,33 @@ export function getCountryOptions(options) {
     continent = defaultContinent;
   }
 
+  // Define column sorting based on sortby parameter
+  let orderBy = {};
+  if (sortby) {
+    switch (sortby) {
+      case "Pop_Asc":
+        orderBy = {
+          Population: "asc",
+        };
+        break;
+
+      case "Pop_Desc":
+        orderBy = {
+          Population: "desc",
+        };
+        break;
+
+      default:
+        orderBy = {
+          Population: "desc",
+        };
+        break;
+    }
+  }
+
   return {
     // Default sorting: by population, descending
-    orderBy: {
-      Population: "desc",
-    },
+    orderBy,
     where: {
       // If a continent filter is set, filter to only get countries from that continent
       ...(continent && { Continent: { equals: continent } }),
