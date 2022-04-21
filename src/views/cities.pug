@@ -18,6 +18,7 @@ block content
             ]
         }
 
+        const filterContinent = options.continent !== undefined;
         const getContinent = () => options.continent;
         const getSortBy  = () => options.sortby;
         const limit = options.limit
@@ -28,10 +29,12 @@ block content
             form(id="main-form", action="/cities", method="GET")
                 div.panel-block
                     div.field
-                        label.label Continent
+                        label.checkbox.label
+                            input(id="chk-continent", type="checkbox", checked=filterContinent, style="margin-right: 0.5rem;")
+                            | Continent
                         div.control
                             div.select
-                                select(name="continent")
+                                select(id="input-continent", name="continent", disabled=!filterContinent)
                                     each opt in form.continent
                                         - const { label, value } = opt;
                                         option(value=value, selected=value === getContinent()) #{label}
@@ -78,13 +81,22 @@ block content
 
     script.
         const formEl = document.getElementById("main-form");
-        const chkToggleLimit = document.getElementById("chk-limit");
+        
+        // Limit + toggle
         const limitEl = document.getElementById("input-limit");
-
+        const chkToggleLimit = document.getElementById("chk-limit");
         chkToggleLimit.addEventListener("change", handleToggleLimit);
-
         function handleToggleLimit(e) {
             const limitEnabled = e.target.checked;
             limit = limitEnabled ? 1 : undefined;
             limitEl.disabled = !limitEnabled
+        }
+
+        // Continent filter + toggle
+        const continentEl = document.getElementById("input-continent");
+        const chkContinent = document.getElementById("chk-continent");
+        chkContinent.addEventListener("change", handleToggleContinent);
+        function handleToggleContinent(e) {
+            const enabled = e.target.checked;
+            continentEl.disabled = !enabled;
         }
