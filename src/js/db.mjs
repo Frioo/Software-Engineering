@@ -112,18 +112,25 @@ export async function getCities(options) {
   // Remove limit from options and store it separately
   // This is done because we want to apply the limit to cities, not countries
   // Also extract capital-only bool param
-  const { limit, capital, ...opts } = options;
+  const { limit, capital, district, country, ...opts } = options;
   // Fetch countries and their cities (also pass all the other filters and stuff)
   const countries = await getCountries(opts);
   // Collect cities from countries based on filters
-  const cities = countries.reduce((res, country) => {
-    if (capital && country.CapitalCity) {
+  const cities = countries.reduce((res, c) => {
+    let toAdd = [];
+
+
+    // Capital city filter
+    if (capital && c.CapitalCity) {
       // Only add capital cities
-      res = [...res, country.CapitalCity];
+      toAdd = [c.CapitalCity];
     } else if (!capital) {
-      // Add all cities from all countries
-      res = [...res, ...country.city];
+      // Add all cities from each country
+      toAdd = c.city;
     }
+    // Append processed cities to results
+    res = [...res, ...toAdd];
+
     return res;
   }, []);
 
