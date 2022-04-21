@@ -103,6 +103,26 @@ export async function getCountries(options) {
   return res;
 }
 
+/*
+ * Method to retrieve all cities
+ * or filter/sort by specific columns
+ */
+export async function getCities(options) {
+  const { limit, ...opts } = options;
+  console.log("GetCities", opts);
+  const countries = await getCountries(options);
+  const cities = countries.reduce((res, country) => {
+    res = [...res, ...country.city];
+    return res;
+  }, []);
+
+  if (limit && limit > 0) {
+    return cities.splice(0, limit);
+  }
+
+  return cities;
+}
+
 export async function LivingInCities(options) {
   let res = await getCountries(options)
   let pop = 0
