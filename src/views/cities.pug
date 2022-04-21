@@ -20,6 +20,7 @@ block content
 
         const getContinent = () => options.continent;
         const getSortBy  = () => options.sortby;
+        const limit = options.limit
 
     .container
         article.panel(id="panel-options")
@@ -30,7 +31,7 @@ block content
                         label.label Continent
                         div.control
                             div.select
-                                select(name="continent", onchange='handleChange()')
+                                select(name="continent")
                                     each opt in form.continent
                                         - const { label, value } = opt;
                                         option(value=value, selected=value === getContinent()) #{label}
@@ -39,10 +40,19 @@ block content
                         label.label Sort By
                         div.control
                             div.select
-                                select(name="sortby", onchange='handleChange()')
+                                select(name="sortby")
                                     each opt in form.sortBy
                                         - const { label, value } = opt;
                                         option(value=value, selected = value === getSortBy()) #{label}
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
+                            | Limit
+                        div.control
+                            input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                        div.Pop_Asc
+
 
                 div.panel-block
                     button.button(role="submit", class="is-link is-outlined") Apply
@@ -65,3 +75,16 @@ block content
                                 td #{city.CountryCode}
                                 td #{city.District}
                                 td(data-type="number")= Intl.NumberFormat("en-GB").format(city.Population)
+
+    script.
+        const formEl = document.getElementById("main-form");
+        const chkToggleLimit = document.getElementById("chk-limit");
+        const limitEl = document.getElementById("input-limit");
+
+        chkToggleLimit.addEventListener("change", handleToggleLimit);
+
+        function handleToggleLimit(e) {
+            const limitEnabled = e.target.checked;
+            limit = limitEnabled ? 1 : undefined;
+            limitEl.disabled = !limitEnabled
+        }
