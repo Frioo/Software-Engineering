@@ -18,11 +18,16 @@ block content
             ]
         }
 
-        const filterContinent = options.continent !== undefined;
-        const filterDistrict = options.district !== undefined;
-        const getDistrict = () => options.district;
-        const filterCapital = options.capital;
         const getContinent = () => options.continent;
+        const filterContinent = options.continent !== undefined;
+
+        const getRegion = () => options.region;
+        const filterRegion = options.region !== undefined;
+
+        const getDistrict = () => options.district;
+        const filterDistrict = options.district !== undefined;
+        
+        const filterCapital = options.capital;
         const getSortBy  = () => options.sortby;
         const limit = options.limit
 
@@ -41,6 +46,15 @@ block content
                                     each opt in form.continent
                                         - const { label, value } = opt;
                                         option(value=value, selected=value === getContinent()) #{label}
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-region", type="checkbox", checked=filterRegion, style="margin-right: 0.5rem;")
+                            | Region
+                        div.control
+                            div
+                                input.input(id="input-region", name="region", type="text", value=getRegion(), disabled=!filterRegion)
 
                 div.panel-block
                     div.field
@@ -120,6 +134,14 @@ block content
             const enabled = e.target.checked;
             continentEl.disabled = !enabled;
         }
+
+        // Region filter + toggle
+        const regionEl = document.getElementById("input-region");
+        const chkRegion = document.getElementById("chk-region");
+        chkRegion.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            regionEl.disabled = !enabled;
+        });
 
         // District filter + toggle
         const districtEl = document.getElementById("input-district");
