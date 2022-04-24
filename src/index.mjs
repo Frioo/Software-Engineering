@@ -40,6 +40,11 @@ app.get("/countries", async (req, res) => {
   res.render("countries", { options, countries });
 });
 
+// Population reports
+app.get("/population", async (req, res) => {
+  res.render("population", { });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
