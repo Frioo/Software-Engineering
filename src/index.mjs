@@ -44,7 +44,7 @@ app.get("/countries", async (req, res) => {
 app.get("/population", async (req, res) => {
   const options = { ...req.query };
   const population = await getPopulation(options);
-  res.render("population", {});
+  res.render("population", { options, population });
 });
 
 app.listen(port, () => {
