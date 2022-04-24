@@ -16,12 +16,14 @@ block content
             {label: "Population Descending", value: "Pop_Desc"},
             {label: "Population Ascending", value: "Pop_Asc"},
         ]
-        const limit = options.limit
-        
-        const filterContinent = options.continent !== undefined;
         
         const getContinent = () => options.continent;
+        const filterContinent = options.continent !== undefined;
 
+        const getRegion = () => options.region;
+        const filterRegion = options.region !== undefined;
+        
+        const limit = options.limit
         const getSortBy = () => options.sortby;
     .contain
         article.panel(id="panel-options")
@@ -40,6 +42,16 @@ block content
                                         each opt in optionValues
                                             - const { label, value } = opt;
                                             option(value=value, selected=value === getContinent()) #{label}
+                    
+                    div.panel-block
+                        div.field
+                            label.checkbox.label
+                                input(id="chk-region", type="checkbox", checked=filterRegion, style="margin-right: 0.5rem;")
+                                | Region
+                            div.control
+                                div
+                                    input.input(id="input-region", name="region", type="text", value=getRegion(), disabled=!filterRegion)
+
                     div.panel-block
                         div.field
                             label.label Sort By
@@ -117,3 +129,11 @@ block content
             const enabled = e.target.checked;
             continentEl.disabled = !enabled;
         }
+
+        // Region filter + toggle
+        const regionEl = document.getElementById("input-region");
+        const chkRegion = document.getElementById("chk-region");
+        chkRegion.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            regionEl.disabled = !enabled;
+        });
