@@ -1,0 +1,94 @@
+extends layout.pug
+
+block head
+    link(rel="stylesheet", href="/css/countries.css")
+    link(rel="stylesheet", href="/css/population.css")
+
+block content
+    -
+        const continents = [
+            { label: "North America", value: "North_America" },
+            { label: "South America", value: "South_America" },
+            { label: "Europe", value: "Europe" },
+            { label: "Asia", value: "Asia" },
+        ]
+        const getContinent = () => options.continent;
+        const filterContinent = options.continent !== undefined;
+
+        const getRegion = () => options.region;
+        const filterRegion = options.region !== undefined;
+
+        const getDistrict = () => options.district;
+        const filterDistrict = options.district !== undefined;
+
+
+    .contain
+        article.panel(id="panel-options")
+            p.panel-heading Filters & Sorting
+            form(id="main-form", action="/population", method="GET")
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-continent", type="checkbox", checked=filterContinent, style="margin-right: 0.5rem;")
+                            | Continent
+                        div.control
+                            div.select
+                                select(id="input-continent", name="continent", disabled=!filterContinent)
+                                    each opt in continents
+                                        - const { label, value } = opt;
+                                        option(value=value, selected=value === getContinent()) #{label}
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-region", type="checkbox", checked=filterRegion, style="margin-right: 0.5rem;")
+                            | Region
+                        div.control
+                            div
+                                input.input(id="input-region", name="region", type="text", value=getRegion(), disabled=!filterRegion)
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-district", type="checkbox", checked=filterDistrict, style="margin-right: 0.5rem;")
+                            | District
+                        div.control
+                            div
+                                input.input(id="input-district", name="district", type="text", value=getDistrict(), disabled=!filterDistrict)
+
+                div.panel-block
+                    button.button(role="submit", class="is-link is-outlined") Apply
+        article.panel(id="panel-data")
+            div.box
+                span.subtitle Total Population
+                br
+                br
+                span.title.is-2(id="population")= Intl.NumberFormat("en-GB").format(population)
+
+    script.
+        const formEl = document.getElementById("main-form");
+
+        // Continent filter + toggle
+        const continentEl = document.getElementById("input-continent");
+        const chkContinent = document.getElementById("chk-continent");
+        chkContinent.addEventListener("change", handleToggleContinent);
+        function handleToggleContinent(e) {
+            const enabled = e.target.checked;
+            continentEl.disabled = !enabled;
+        }
+
+        // Region filter + toggle
+        const regionEl = document.getElementById("input-region");
+        const chkRegion = document.getElementById("chk-region");
+        chkRegion.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            regionEl.disabled = !enabled;
+        });
+
+        // District filter + toggle
+        const districtEl = document.getElementById("input-district");
+        const chkDistrict = document.getElementById("chk-district");
+        chkDistrict.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            districtEl.disabled = !enabled;
+        });

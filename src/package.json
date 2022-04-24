@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node index.mjs",
     "dev": "dotenv -e .env.development -- nodemon index.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "dotenv -e .env.development -- jest"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -17,6 +18,8 @@
   },
   "devDependencies": {
     "dotenv-cli": "^4.1.1",
+    "jest": "^27.5.1",
+    "jest-mock-extended": "^2.0.4",
     "nodemon": "^2.0.15",
     "prisma": "^3.8.1"
   }

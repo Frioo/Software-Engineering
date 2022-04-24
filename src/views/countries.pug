@@ -10,49 +10,130 @@ block content
                 { label: "North America", value: "North_America" },
                 { label: "South America", value: "South_America" },
                 { label: "Europe", value: "Europe" },
-                { label: "Asia", value: "Asia" }
-            ]
+                { label: "Asia", value: "Asia" }]
         };
-
+        const sortObjects = [
+            {label: "Population Descending", value: "Pop_Desc"},
+            {label: "Population Ascending", value: "Pop_Asc"},
+        ]
+        
         const getContinent = () => options.continent;
+        const filterContinent = options.continent !== undefined;
 
-    form(id="main-form", action="/countries", method="GET")
-        -
-            function submit() {
-                this.form.submit()
-            }
-        each entry in Object.entries(form)
-            - const [optionName, optionValues] = entry;
-            div.field
-                label.label
-                    #{optionName}
-                div.control
-                    div.select
-                        select(name=optionName, onchange='handleChange()')
-                            each opt in optionValues
-                                - const { label, value } = opt;
-                                option(value=value, selected=value === getContinent()) #{label}
-    
-    table.table
-        thead
-            th Code
-            th Name
-            th Continent
-            th Region
-            th Population
-            th Capital
-        tbody
-            each country in countries
-                tr
-                    td #{country.Code}
-                    td #{country.Name}
-                    td #{country.Continent}
-                    td #{country.Region}
-                    td= Intl.NumberFormat("en-GB").format(country.Population)
-                    td #{country.Capital.Name}
+        const getRegion = () => options.region;
+        const filterRegion = options.region !== undefined;
+        
+        const limit = options.limit
+        const getSortBy = () => options.sortby;
+    .contain
+        article.panel(id="panel-options")
+            p.panel-heading Filters & Sorting
+            form(id="main-form", action="/countries", method="GET")
+                each entry in Object.entries(form)
+                    - const [optionName, optionValues] = entry;
+                    div.panel-block
+                        div.field
+                            label.checkbox.label
+                                input(id="chk-continent", type="checkbox", checked=filterContinent, style="margin-right: 0.5rem;")
+                                | Continent
+                            div.control
+                                div.select
+                                    select(id="input-continent", name="continent", disabled=!filterContinent)
+                                        each opt in optionValues
+                                            - const { label, value } = opt;
+                                            option(value=value, selected=value === getContinent()) #{label}
+                    
+                    div.panel-block
+                        div.field
+                            label.checkbox.label
+                                input(id="chk-region", type="checkbox", checked=filterRegion, style="margin-right: 0.5rem;")
+                                | Region
+                            div.control
+                                div
+                                    input.input(id="input-region", name="region", type="text", value=getRegion(), disabled=!filterRegion)
+
+                    div.panel-block
+                        div.field
+                            label.label Sort By
+                            div.control
+                                div.select
+                                    select(name="sortby", onchange='handleChange()')
+                                        each opt in sortObjects
+                                            - const { label, value } = opt;
+                                            option(value=value, selected = value === getSortBy()) #{label}
+                    div.panel-block
+                        div.field
+                            label.checkbox.label
+                                input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
+                                | Limit
+                            div.control
+                                input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                            div.Pop_Asc
+
+
+                div.panel-block
+                    button.button(role="submit", class="is-link is-outlined") Apply
+
+
+        article.panel(id="panel-data")
+            p.panel-heading Data
+            div.panel-block(id="panel-block-table")
+                table.table
+                    thead
+                        th #
+                        th Code
+                        th Name
+                        th Continent
+                        th Region
+                        th Population
+                        th Capital
+                    tbody
+                        each country, index in countries
+                            tr
+                                td(data-type="number") #{index + 1}
+                                td #{country.Code}
+                                td #{country.Name}
+                                td #{country.Continent}
+                                td #{country.Region}
+                                td(data-type="number")= Intl.NumberFormat("en-GB").format(country.Population)
+                                - let CapitalCity = country.CapitalCity
+                                if CapitalCity
+                                    td #{country.CapitalCity.Name}
+                                else
+                                    td "N/A"
     
     script.
+        const formEl = document.getElementById("main-form");
+        const limitEl = document.getElementById("input-limit");
+        let changed = false
+
+        // Limit + toggle
+        const chkToggleLimit = document.getElementById("chk-limit");
+        chkToggleLimit.addEventListener("change", handleToggleLimit);
+
         function handleChange() {
-            const form = document.getElementById("main-form");
-            form.submit();
+            changed = true;
         }
+
+        function handleToggleLimit(e) {
+            const limitEnabled = e.target.checked;
+            limit = limitEnabled ? 1 : undefined;
+            limitEl.disabled = !limitEnabled
+        }
+
+        // Continent filter + toggle
+        const continentEl = document.getElementById("input-continent");
+        const chkContinent = document.getElementById("chk-continent");
+        chkContinent.addEventListener("change", handleToggleContinent);
+        function handleToggleContinent(e) {
+            const enabled = e.target.checked;
+            continentEl.disabled = !enabled;
+        }
+
+        // Region filter + toggle
+        const regionEl = document.getElementById("input-region");
+        const chkRegion = document.getElementById("chk-region");
+        chkRegion.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            regionEl.disabled = !enabled;
+        });
