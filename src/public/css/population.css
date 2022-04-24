@@ -1,0 +1,14 @@
+form.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.control .radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#population {
+  
+}

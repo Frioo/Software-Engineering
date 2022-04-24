@@ -1,0 +1,152 @@
+extends layout.pug
+
+block head
+    link(rel="stylesheet", href="/css/countries.css")
+
+block content
+    -
+        const form = {
+            continent: [
+                { label: "North America", value: "North_America" },
+                { label: "South America", value: "South_America" },
+                { label: "Europe", value: "Europe" },
+                { label: "Asia", value: "Asia" },
+            ],
+            sortBy: [
+                { label: "Population Descending", value: "Pop_Desc" },
+                { label: "Population Ascending", value: "Pop_Asc" },
+            ]
+        }
+
+        const getContinent = () => options.continent;
+        const filterContinent = options.continent !== undefined;
+
+        const getRegion = () => options.region;
+        const filterRegion = options.region !== undefined;
+
+        const getDistrict = () => options.district;
+        const filterDistrict = options.district !== undefined;
+        
+        const filterCapital = options.capital;
+        const getSortBy  = () => options.sortby;
+        const limit = options.limit
+
+    .contain
+        article.panel(id="panel-options")
+            p.panel-heading Filters & Sorting
+            form(id="main-form", action="/cities", method="GET")
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-continent", type="checkbox", checked=filterContinent, style="margin-right: 0.5rem;")
+                            | Continent
+                        div.control
+                            div.select
+                                select(id="input-continent", name="continent", disabled=!filterContinent)
+                                    each opt in form.continent
+                                        - const { label, value } = opt;
+                                        option(value=value, selected=value === getContinent()) #{label}
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-region", type="checkbox", checked=filterRegion, style="margin-right: 0.5rem;")
+                            | Region
+                        div.control
+                            div
+                                input.input(id="input-region", name="region", type="text", value=getRegion(), disabled=!filterRegion)
+
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-district", type="checkbox", checked=filterDistrict, style="margin-right: 0.5rem;")
+                            | District
+                        div.control
+                            div
+                                input.input(id="input-district", name="district", type="text", value=getDistrict(), disabled=!filterDistrict)
+                
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-capital", name="capital", type="checkbox", checked=filterCapital)
+                            | Capital
+                
+                div.panel-block
+                    div.field
+                        label.label Sort By
+                        div.control
+                            div.select
+                                select(name="sortby")
+                                    each opt in form.sortBy
+                                        - const { label, value } = opt;
+                                        option(value=value, selected = value === getSortBy()) #{label}
+                
+                div.panel-block
+                    div.field
+                        label.checkbox.label
+                            input(id="chk-limit", type="checkbox", checked=limit, style="margin-right: 0.5rem;")
+                            | Limit
+                        div.control
+                            input.input(id="input-limit", type="number", name="limit", min=1, step=1, value=limit || 1, disabled=!limit)
+                        div.Pop_Asc
+
+
+                div.panel-block
+                    button.button(role="submit", class="is-link is-outlined") Apply
+
+        article.panel(id="panel-data")
+            p.panel-heading Data
+            div.panel-block(id="panel-block-table")
+                table.table
+                    thead
+                        th #
+                        th Name
+                        th Country Code
+                        th District
+                        th Population
+                    tbody
+                        each city, index in cities
+                            tr
+                                td(data-type="number") #{index + 1}
+                                td #{city.Name}
+                                td #{city.CountryCode}
+                                td #{city.District}
+                                td(data-type="number")= Intl.NumberFormat("en-GB").format(city.Population)
+
+    script.
+        const formEl = document.getElementById("main-form");
+        
+        // Limit + toggle
+        const limitEl = document.getElementById("input-limit");
+        const chkToggleLimit = document.getElementById("chk-limit");
+        chkToggleLimit.addEventListener("change", handleToggleLimit);
+        function handleToggleLimit(e) {
+            const limitEnabled = e.target.checked;
+            limit = limitEnabled ? 1 : undefined;
+            limitEl.disabled = !limitEnabled
+        }
+
+        // Continent filter + toggle
+        const continentEl = document.getElementById("input-continent");
+        const chkContinent = document.getElementById("chk-continent");
+        chkContinent.addEventListener("change", handleToggleContinent);
+        function handleToggleContinent(e) {
+            const enabled = e.target.checked;
+            continentEl.disabled = !enabled;
+        }
+
+        // Region filter + toggle
+        const regionEl = document.getElementById("input-region");
+        const chkRegion = document.getElementById("chk-region");
+        chkRegion.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            regionEl.disabled = !enabled;
+        });
+
+        // District filter + toggle
+        const districtEl = document.getElementById("input-district");
+        const chkDistrict = document.getElementById("chk-district");
+        chkDistrict.addEventListener("change", (e) => {
+            const enabled = e.target.checked;
+            districtEl.disabled = !enabled;
+        })

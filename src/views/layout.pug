@@ -1,0 +1,14 @@
+doctype html 
+html 
+    head 
+        link(rel='stylesheet', href='/bulma.min.css')
+        link(rel='stylesheet', href='/global.css')
+        title Header
+        block head
+    body
+        #layout
+            #layout-nav
+                include mixins/nav
+                +navigation()
+            #layout-content
+                block content

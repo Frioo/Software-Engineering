@@ -1,0 +1,18 @@
+mixin navigation
+  -
+    const getPath = () => window.location.pathname;
+    const routes = [
+      { label: "Home", href: "/" },
+      { label: "Countries", href: "/countries" },
+      { label: "Cities", href: "/cities" },
+      { label: "Population", href: "/population" },
+    ];
+
+  aside.menu
+    img(src="/logo.png")
+    p.menu-label Views
+    ul.menu-list
+      each route in routes
+        - const { label, href } = route
+        li
+          a(href=href, class=href === path ? "is-active" : "") #{label}

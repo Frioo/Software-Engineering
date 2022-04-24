@@ -1,0 +1,84 @@
+.contain {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+}
+
+/* Form styles (for filters, sorting, etc.) */
+
+/* Wrapper */
+#panel-options {
+  grid-row: 1;
+  grid-column: 2;
+  height: fit-content;
+}
+
+/* 
+  Form is positioned on top of the table.
+  Display the inputs in a row, with gap of 1rem between them
+*/
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 
+  Field class is used as a container for form fields
+  Displays the label and form control in rows of a grid container
+*/
+form div.field.field {
+  margin-bottom: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+form label.label {
+  text-transform: capitalize;
+  user-select: none;
+  line-height: inherit;
+}
+
+/* Submit button */
+form button.button[role="submit"] {
+  width: 100%;
+}
+
+/* Table styles for displaying the data */
+
+/* Table wrapper */
+#panel-data {
+  grid-row: 1;
+  grid-column: 1;
+  height: fit-content;
+}
+
+#panel-data #panel-block-table {
+  padding: 0;
+  overflow: hidden;
+}
+
+table.table {
+  width: 100%;
+  height: fit-content;
+}
+
+/* Expand each cell's content to the maximum width (prevents line-wrapping) */
+table td {
+  width: max-content;
+  white-space: pre;
+}
+
+/* Expand country name column to fill the leftover space */
+table td:nth-child(3) {
+  width: 100%;
+}
+
+/* Align index and population column values to the right (better for reading the numbers) */
+table td[data-type="number"] {
+  text-align: right;
+}
