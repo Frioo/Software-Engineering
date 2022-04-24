@@ -198,3 +198,27 @@ export async function LivingInCities(options) {
   });
   return pop;
 }
+
+export async function getPopulation(options) {
+  const { district, ...opts } = options;
+  let res = await getCountries(opts);
+  let population = 0;
+  for (let country of res) {
+    if (!country.Population) {
+      continue;
+    }
+
+    if (district) {
+      population += country.city.reduce((total, city) => {
+        if (!city.Population || (district && city.District !== district)) {
+          return total;
+        }
+        total += city.Population;
+        return total;
+      }, 0);
+    } else {
+      population += country.Population;
+    }
+  }
+  return population;
+}

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
-import { getCountries, getCities } from "./js/db.mjs";
+import { getCountries, getCities, getPopulation } from "./js/db.mjs";
 
 const app = express();
 const port = 8081;
@@ -42,7 +42,9 @@ app.get("/countries", async (req, res) => {
 
 // Population reports
 app.get("/population", async (req, res) => {
-  res.render("population", { });
+  const options = { ...req.query };
+  const population = await getPopulation(options);
+  res.render("population", {});
 });
 
 app.listen(port, () => {
